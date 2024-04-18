@@ -117,7 +117,7 @@ def test_create_kit_empty_json_get_error_response():
   negative_assert({}, auth_token)
 
 
-"""_
+"""
 Kit test 9.
 Se ha pasado un tipo de parámetro diferente (número): kit_body = { "name": 123 }
 """
