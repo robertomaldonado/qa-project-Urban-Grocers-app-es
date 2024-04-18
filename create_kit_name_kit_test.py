@@ -10,35 +10,42 @@ def create_new_user_token_on_success():
   return user_response.json()["authToken"]
 
 
-""" 
+def positive_assert(kit_body, auth_token):
+  # El resultado de la solicitud para crear un nuevo kit se guarda en la variable response
+  user_response = sender_stand_request.post_new_kit(kit_body, auth_token)
+
+  # Comprueba si el código de estado es 201
+  assert user_response.status_code == 201
+
+  # Comprueba que el campo "name" del cuerpo de la respuesta coincide con el campo "name" del cuerpo de la solicitud
+  assert user_response.json()["name"] == kit_body["name"]
+
+
+"""
 Kit test 1.
 El número permitido de caracteres (1): kit_body = { "name": "a"}
-201
 """
 
 
-def test_1():
+def test_create_kit_1_letter_in_name_get_success_response():
   auth_token = create_new_user_token_on_success()
-  resp = sender_stand_request.post_new_kit(
-      {'name': 'a'}, auth_token)
-  print(resp.json())
+  positive_assert({"name": "a"}, auth_token)
 
 
-""" 
+"""
 Kit test 2.
-El número permitido de caracteres (511): kit_body = { "name":"El valor de prueba para esta comprobación será inferior a"}
-201
+El número permitido de caracteres (511): kit_body = { "name":"El valor de prueba para esta comprobación será inferior a 512"}
 """
 
 
-def test_2():
-  pass
+def test_create_kit_511_letters_in_name_get_success_response():
+  auth_token = create_new_user_token_on_success()
+  positive_assert(data.kit_body_name_limit, auth_token)
 
 
 """
 Kit test 3.
 El número de caracteres es menor que la cantidad permitida (0): kit_body = { "name": "" }
-400
 """
 
 
@@ -113,4 +120,5 @@ def test_9():
 
 
 if __name__ == "__main__":
-  test_1()
+  test_create_kit_1_letter_in_name_get_success_response()
+  test_create_kit_511_letters_in_name_get_success_response()
