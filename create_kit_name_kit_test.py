@@ -21,6 +21,14 @@ def positive_assert(kit_body, auth_token):
   assert user_response.json()["name"] == kit_body["name"]
 
 
+def negative_assert(kit_body, auth_token):
+  # El resultado de la solicitud para crear un nuevo kit se guarda en la variable response
+  user_response = sender_stand_request.post_new_kit(kit_body, auth_token)
+
+  # Comprueba si el código de estado es 400
+  assert user_response.status_code == 400
+
+
 """
 Kit test 1.
 El número permitido de caracteres (1): kit_body = { "name": "a"}
@@ -34,7 +42,7 @@ def test_create_kit_1_letter_in_name_get_success_response():
 
 """
 Kit test 2.
-El número permitido de caracteres (511): kit_body = { "name":"El valor de prueba para esta comprobación será inferior a 512"}
+El número permitido de caracteres (511)
 """
 
 
@@ -49,76 +57,72 @@ El número de caracteres es menor que la cantidad permitida (0): kit_body = { "n
 """
 
 
-def test_3():
-  pass
+def test_create_kit_0_letters_in_name_get_error_response():
+  auth_token = create_new_user_token_on_success()
+  negative_assert({"name": ""}, auth_token)
 
 
 """
 Kit test 4.
-El número de caracteres es mayor que la cantidad permitida (512): kit_body = { "name":"El valor de prueba para esta comprobación será inferior a” }
-400
+El número de caracteres es mayor que la cantidad permitida (512)
 """
 
 
-def test_4():
-  pass
+def test_create_kit_512_letters_in_name_get_error_response():
+  auth_token = create_new_user_token_on_success()
+  negative_assert(data.kit_body_name_exceeds_limit, auth_token)
 
 
 """
 Kit test 5.
 Se permiten caracteres especiales: kit_body = { "name": ""№%@"," }
-201
 """
 
 
-def test_5():
-  pass
+def test_create_kit_special_chars_in_name_get_success_response():
+  auth_token = create_new_user_token_on_success()
+  positive_assert({"name": "\"№% @\","}, auth_token)
 
 
 """
 Kit test 6.
 Se permiten espacios: kit_body = { "name": " A Aaa " }
-201
 """
 
 
-def test_6():
-  pass
+def test_create_kit_whitespaces_in_name_get_success_response():
+  auth_token = create_new_user_token_on_success()
+  positive_assert({"name": " A Aaa "}, auth_token)
 
 
 """
 Kit test 7.
 Se permiten números: kit_body = { "name": "123" }
-201
 """
 
 
-def test_7():
-  pass
+def test_create_kit_numbers_as_string_in_name_get_success_response():
+  auth_token = create_new_user_token_on_success()
+  positive_assert({"name": "123"}, auth_token)
 
 
 """
 Kit test 8.
 El parámetro no se pasa en la solicitud: kit_body = { }
-400
 """
 
 
-def test_8():
-  pass
+def test_create_kit_empty_json_get_error_response():
+  auth_token = create_new_user_token_on_success()
+  negative_assert({}, auth_token)
 
 
-"""
+"""_
 Kit test 9.
 Se ha pasado un tipo de parámetro diferente (número): kit_body = { "name": 123 }
-400
 """
 
 
-def test_9():
-  pass
-
-
-if __name__ == "__main__":
-  test_create_kit_1_letter_in_name_get_success_response()
-  test_create_kit_511_letters_in_name_get_success_response()
+def test_create_kit_different_param_type_in_name_get_error_response():
+  auth_token = create_new_user_token_on_success()
+  negative_assert({"name": 123}, auth_token)
