@@ -3,5 +3,6 @@
 .pytest_cache/
 __pycache__/
 .vscode
+.DS_Store
 .venv
 requirements.txt
