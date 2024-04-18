@@ -1,6 +1,7 @@
 import configuration
 import requests
 import data
+import json
 
 
 def get_docs():
@@ -25,3 +26,15 @@ def post_products_kits(products_ids):
   return requests.post(configuration.URL_SERVICE + configuration.PRODUCTS_KITS_PATH,
                        json=products_ids,
                        headers=data.headers)
+
+
+def post_new_kit(body, auth_token):
+  headers = data.headers
+  headers["Authorization"] = f"Bearer {auth_token}"
+
+  payload = json.dumps(body)
+
+  return requests.post(configuration.URL_SERVICE + configuration.KITS_PATH,
+                       headers=headers,
+                       data=payload
+                       )

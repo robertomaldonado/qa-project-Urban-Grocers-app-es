@@ -18,7 +18,10 @@ El número permitido de caracteres (1): kit_body = { "name": "a"}
 
 
 def test_1():
-  pass
+  auth_token = create_new_user_token_on_success()
+  resp = sender_stand_request.post_new_kit(
+      {'name': 'a'}, auth_token)
+  print(resp.json())
 
 
 """ 
@@ -110,4 +113,4 @@ def test_9():
 
 
 if __name__ == "__main__":
-  user_token = create_new_user_token_on_success()
+  test_1()
