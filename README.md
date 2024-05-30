@@ -1,3 +1,6 @@
+![Python](https://img.shields.io/badge/python-3.11.3-blue?logo=python)
+![Pytest](https://img.shields.io/badge/pytest-8.1.1-blue?logo=pytest)
+
 # Quality Assurance Tests para Urban Grocers [Creacion de Kit]
 
 Pruebas automatizadas para la aplicacion Urban Grocers, seccion de creacion de kits de comida.
